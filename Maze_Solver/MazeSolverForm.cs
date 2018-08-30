@@ -35,14 +35,8 @@ namespace Maze_Solver
 
             brushColor = new SolidBrush(Color.Purple);
             pen = new Pen(brushColor, 3);
-            List<Node> paths = _aStar.Paths;
-            int size = _aStar.MazeSize;
-            for (int i = 0; i < paths.Count-1; i++)
-            {
-                Point point1 = new Point(paths[i].X + size / 2, paths[i].Y + size / 2);
-                Point point2 = new Point(paths[i + 1].X + size / 2, paths[i + 1].Y + size / 2);
-                e.Graphics.DrawLine(pen, point1, point2);
-            }
+
+            DrawPath(e, pen);
         }
 
         private void DrawMaze(PaintEventArgs e, Pen pen)
@@ -60,23 +54,35 @@ namespace Maze_Solver
             }
         }
 
+        private void DrawPath(PaintEventArgs e, Pen pen)
+        {
+            List<Node> paths = _aStar.Paths;
+            int size = _aStar.MazeSize;
+            for (int i = 0; i < paths.Count - 1; i++)
+            {
+                Point point1 = new Point(paths[i].X + size / 2, paths[i].Y + size / 2);
+                Point point2 = new Point(paths[i + 1].X + size / 2, paths[i + 1].Y + size / 2);
+                e.Graphics.DrawLine(pen, point1, point2);
+            }
+        }
+
         private void ReportProgressHandler()
         {
             Invalidate();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ButtonGenerator_Click(object sender, EventArgs e)
         {
             paint = true;
+            _aStar.MazeSize = Convert.ToInt32(textBoxMazeSize.Text);
+            _aStar.VisualizeMaze = checkBoxAnimate.Checked;
             _aStar.ReportProgress += ReportProgressHandler;
             _aStar.PopulateNodes(Width, Height, panelSidebar.Width);
 
             Maze.ReportProgress += ReportProgressHandler;
 
-            Task.Run(() => Maze.GenerateMaze(_aStar.Nodes))
+            Task.Run(() => Maze.GenerateMaze(_aStar.Nodes, _aStar.VisualizeMaze))
                 .ContinueWith(t => _aStar.AddNeighbors());
-
-            //Invalidate();
         }
 
         private void button2_Click(object sender, EventArgs e)

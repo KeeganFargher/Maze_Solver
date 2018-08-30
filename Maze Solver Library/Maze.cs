@@ -12,10 +12,9 @@ namespace Maze_Solver_Library
         public delegate void EventDelegate();
         public static event EventDelegate ReportProgress;
 
-        private static object synclock = new object();
         private static Random random = new Random();
 
-        public static void GenerateMaze(Node[,] Nodes)
+        public static void GenerateMaze(Node[,] Nodes, bool visualizeMaze)
         {
             Node current = Nodes[0, 0];
             List<Node> stack = new List<Node>();
@@ -68,7 +67,11 @@ namespace Maze_Solver_Library
                     current = temp;
                 }
 
-                ReportProgress?.Invoke();
+                ReportProgress();
+                if (visualizeMaze)
+                {
+                    Thread.Sleep(1);
+                }
             }
         }
 

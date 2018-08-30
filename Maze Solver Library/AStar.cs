@@ -15,6 +15,7 @@ namespace Maze_Solver_Library
         public event EventDelegate ReportProgress;
 
         public int MazeSize { get; set; } = 10;
+        public bool VisualizeMaze { get; set; } = true;
 
         public Node[,] Nodes { get; private set; }
 
@@ -69,22 +70,12 @@ namespace Maze_Solver_Library
 
         public void SolveMaze()
         {
-
             while (OpenSet.Count != 0)
             {
-                int winnerIndex = 0;
-                Node current = new Node();
+                int winnerIndex = CalculateWinnerIndex();
+                Node current = OpenSet[winnerIndex];
 
-                for (int i = 0; i < OpenSet.Count; i++)
-                {
-                    if (OpenSet[i].FScore < OpenSet[winnerIndex].FScore)
-                    {
-                        winnerIndex = i;
-                    }
-                }
-
-                current = OpenSet[winnerIndex];
-
+                //  We reached the end if this evaluates to true
                 if (current == _finishNode)
                 {
                     return;
@@ -93,51 +84,78 @@ namespace Maze_Solver_Library
                 OpenSet.Remove(current);
                 ClosedSet.Add(current);
 
-                List<Node> neighbors = current.Neighbors;
-                for (int i = 0; i < neighbors.Count; i++)
-                {
-                    Node neighbor = neighbors[i];
-                    if (!ClosedSet.Contains(neighbor) && !neighbor.IsWall)
-                    {
-                        int tempGScore = current.GScore + 1;
+                var neighbors = current.Neighbors;
+                CalculateNeighbors(current, neighbors);
 
-                        bool newPath = false;
-                        if (OpenSet.Contains(neighbor))
-                        {
-                            if (tempGScore < neighbor.GScore)
-                            {
-                                neighbor.GScore = tempGScore;
-                                newPath = true;
-                            }
-                        }
-                        else
-                        {
-                            neighbor.GScore = tempGScore;
-                            OpenSet.Add(neighbor);
-                            newPath = true;
-                        }
+                //  Calculates the current path
+                CalculatePath(current);
 
-                        if (newPath)
-                        {
-                            neighbor.Hscore = Heuristic(neighbor, _finishNode);
-                            neighbor.FScore = neighbor.GScore + neighbor.Hscore;
-                            neighbor.Previous = current;
-                        }
-                    }
-                }
-
-                Paths = new List<Node>();
-                Node temp = current;
-                Paths.Add(temp);
-                while (temp.Previous != null)
-                {
-                    Paths.Add(temp.Previous);
-                    temp = temp.Previous;
-                }
                 ReportProgress();
-                Thread.Sleep(1);
+                Thread.Sleep(10);
             }
         }
+
+        private int CalculateWinnerIndex()
+        {
+            int winnerIndex = 0;
+            for (int i = 0; i < OpenSet.Count; i++)
+            {
+                if (OpenSet[i].FScore < OpenSet[winnerIndex].FScore)
+                {
+                    winnerIndex = i;
+                }
+            }
+
+            return winnerIndex;
+        }
+
+        private void CalculatePath(Node current)
+        {
+            Paths = new List<Node>();
+            Node temp = current;
+            Paths.Add(temp);
+            while (temp.Previous != null)
+            {
+                Paths.Add(temp.Previous);
+                temp = temp.Previous;
+            }
+        }
+
+        private void CalculateNeighbors(Node current, List<Node> neighbors)
+        {
+            for (int i = 0; i < neighbors.Count; i++)
+            {
+                Node neighbor = neighbors[i];
+
+                if (ClosedSet.Contains(neighbor) || neighbor.IsWall) continue;
+
+                int tempGScore = current.GScore + 1;
+
+                bool newPath = false;
+                if (OpenSet.Contains(neighbor))
+                {
+                    if (tempGScore < neighbor.GScore)
+                    {
+                        neighbor.GScore = tempGScore;
+                        newPath = true;
+                    }
+                }
+                else
+                {
+                    neighbor.GScore = tempGScore;
+                    OpenSet.Add(neighbor);
+                    newPath = true;
+                }
+
+                if (newPath)
+                {
+                    neighbor.Hscore = Heuristic(neighbor, _finishNode);
+                    neighbor.FScore = neighbor.GScore + neighbor.Hscore;
+                    neighbor.Previous = current;
+                }
+            }
+        }
+
 
         private double Heuristic(Node a, Node b)
         {
