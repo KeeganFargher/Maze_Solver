@@ -1,6 +1,6 @@
-# Maze_Solver
+# Maze Generator and Solver
 
-Generates mazes using a [Recursive backtracker](https://en.wikipedia.org/wiki/Maze_generation_algorithm)
+Generates a maze using a [Recursive backtracker](https://en.wikipedia.org/wiki/Maze_generation_algorithm)
 and solves mazes using the [A* Algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm). Purposely slowed down to illustrate how the mazes are generated and solved. There is an option to disable this.
 
 # Examples
