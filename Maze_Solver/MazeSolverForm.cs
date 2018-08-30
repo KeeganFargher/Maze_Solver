@@ -31,15 +31,15 @@ namespace Maze_Solver
             Pen pen = new Pen(brushColor, 2);
 
             //  Draw maze
-            DrawMaze(e, pen);
+            DrawMaze(e, pen, 2);
 
-            brushColor = new SolidBrush(Color.Purple);
+            brushColor = new SolidBrush(Color.FromArgb(95, 39, 205));
             pen = new Pen(brushColor, 3);
 
             DrawPath(e, pen);
         }
 
-        private void DrawMaze(PaintEventArgs e, Pen pen)
+        private void DrawMaze(PaintEventArgs e, Pen pen, int penSize)
         {
             for (int row = 0; row < _aStar.Nodes.GetLength(0); row++)
             {
@@ -50,8 +50,30 @@ namespace Maze_Solver
                     {
                         e.Graphics.DrawLine(pen, points[i], points[i + 1]);
                     }
+
+                    //  Fill color to see that this is the starting node
+                    if (_aStar.Nodes[row, col].IsStartNode)
+                    {
+                        Brush startBrush = new SolidBrush(Color.Green);
+                        e.Graphics.FillRectangle(startBrush, GetRectangleF(row, col, penSize));
+                    }
+
+                    if (_aStar.Nodes[row, col].IsFinishNode)
+                    {
+                        Brush startBrush = new SolidBrush(Color.Red);
+                        e.Graphics.FillRectangle(startBrush, GetRectangleF(row, col, penSize));
+                    }
                 }
             }
+        }
+
+        private RectangleF GetRectangleF(int row, int col, int penSize)
+        {
+            return new RectangleF(
+                _aStar.Nodes[row, col].X + penSize,
+                _aStar.Nodes[row, col].Y + penSize,
+                _aStar.MazeSize - penSize,
+                _aStar.MazeSize - penSize);
         }
 
         private void DrawPath(PaintEventArgs e, Pen pen)
@@ -74,7 +96,7 @@ namespace Maze_Solver
         private void ButtonGenerator_Click(object sender, EventArgs e)
         {
             paint = true;
-            _aStar.MazeSize = Convert.ToInt32(textBoxMazeSize.Text);
+            _aStar.MazeSize = Convert.ToInt32(trackBarSize.Value);
             _aStar.VisualizeMaze = checkBoxAnimate.Checked;
             _aStar.ReportProgress += ReportProgressHandler;
             _aStar.PopulateNodes(Width, Height, panelSidebar.Width);
@@ -85,9 +107,9 @@ namespace Maze_Solver
                 .ContinueWith(t => _aStar.AddNeighbors());
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void ButtonSolve_Click(object sender, EventArgs e)
         {
-            Task.Run(() => _aStar.SolveMaze())
+            Task.Run(() => _aStar.SolveMaze(checkBoxSolver.Checked))
                 .ContinueWith(t => Invalidate());
             Invalidate();
         }

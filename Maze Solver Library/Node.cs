@@ -60,6 +60,13 @@ namespace Maze_Solver_Library
         /// </summary>
         public bool[] Walls { get; } = {true, true, true, true};
 
+        public bool IsStartNode { get; set; }
+
+        public bool IsFinishNode { get; set; }
+
+        /// <summary>
+        /// The node that comes before this one
+        /// </summary>
         public Node Previous { get; set; }
 
         /// <summary>

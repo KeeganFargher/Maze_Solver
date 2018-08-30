@@ -52,13 +52,17 @@ namespace Maze_Solver_Library
 
             //  Create a start and end point for the maze
             _startNode = Nodes[0, 0];
+            _startNode.IsStartNode = true;
+
             _finishNode = Nodes[Nodes.GetLength(0) - 1, Nodes.GetLength(1) - 1];
+            _finishNode.IsFinishNode = true;
+
             OpenSet.Add(_startNode);
         }
 
+        //  Add neighbors to each node
         public void AddNeighbors()
         {
-            //  Add neighbors to each node
             for (int row = 0; row < Nodes.GetLength(0); row++)
             {
                 for (int col = 0; col < Nodes.GetLength(1); col++)
@@ -68,18 +72,12 @@ namespace Maze_Solver_Library
             }
         }
 
-        public void SolveMaze()
+        public void SolveMaze(bool visualizeSolver)
         {
             while (OpenSet.Count != 0)
             {
                 int winnerIndex = CalculateWinnerIndex();
                 Node current = OpenSet[winnerIndex];
-
-                //  We reached the end if this evaluates to true
-                if (current == _finishNode)
-                {
-                    return;
-                }
 
                 OpenSet.Remove(current);
                 ClosedSet.Add(current);
@@ -90,38 +88,21 @@ namespace Maze_Solver_Library
                 //  Calculates the current path
                 CalculatePath(current);
 
-                ReportProgress();
-                Thread.Sleep(10);
-            }
-        }
-
-        private int CalculateWinnerIndex()
-        {
-            int winnerIndex = 0;
-            for (int i = 0; i < OpenSet.Count; i++)
-            {
-                if (OpenSet[i].FScore < OpenSet[winnerIndex].FScore)
+                //  We reached the end if this evaluates to true
+                if (current == _finishNode)
                 {
-                    winnerIndex = i;
+                    return;
+                }
+
+                ReportProgress();
+                if (visualizeSolver)
+                {
+                    Thread.Sleep(10);
                 }
             }
-
-            return winnerIndex;
         }
 
-        private void CalculatePath(Node current)
-        {
-            Paths = new List<Node>();
-            Node temp = current;
-            Paths.Add(temp);
-            while (temp.Previous != null)
-            {
-                Paths.Add(temp.Previous);
-                temp = temp.Previous;
-            }
-        }
-
-        private void CalculateNeighbors(Node current, List<Node> neighbors)
+        private void CalculateNeighbors(Node current, IReadOnlyList<Node> neighbors)
         {
             for (int i = 0; i < neighbors.Count; i++)
             {
@@ -156,8 +137,33 @@ namespace Maze_Solver_Library
             }
         }
 
+        private int CalculateWinnerIndex()
+        {
+            int winnerIndex = 0;
+            for (int i = 0; i < OpenSet.Count; i++)
+            {
+                if (OpenSet[i].FScore < OpenSet[winnerIndex].FScore)
+                {
+                    winnerIndex = i;
+                }
+            }
 
-        private double Heuristic(Node a, Node b)
+            return winnerIndex;
+        }
+
+        private void CalculatePath(Node current)
+        {
+            Paths = new List<Node>();
+            Node temp = current;
+            Paths.Add(temp);
+            while (temp.Previous != null)
+            {
+                Paths.Add(temp.Previous);
+                temp = temp.Previous;
+            }
+        }
+
+        private static double Heuristic(Node a, Node b)
         {
             double dist = Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
             return dist;
