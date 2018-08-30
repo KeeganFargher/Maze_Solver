@@ -29,10 +29,19 @@ namespace Maze_Solver_Library
         /// </summary>
         public int Column { get; set; }
 
+        /// <summary>
+        /// The F score of the node
+        /// </summary>
         public double FScore { get; set; }
 
+        /// <summary>
+        /// The G score of the node
+        /// </summary>
         public int GScore { get; set; }
 
+        /// <summary>
+        /// The H score of the node
+        /// </summary>
         public double Hscore { get; set; }
 
         /// <summary>
@@ -50,6 +59,8 @@ namespace Maze_Solver_Library
         /// For example -- if Walls[0] is false then there will be no top wall
         /// </summary>
         public bool[] Walls { get; } = {true, true, true, true};
+
+        public Node Previous { get; set; }
 
         /// <summary>
         /// The neighbors that surround this node
@@ -93,6 +104,35 @@ namespace Maze_Solver_Library
                 points.Add(new Point(X, Y));
             }
             return points;
+        }
+
+        public void AddNeighbors(Node[,] Nodes)
+        {
+            Neighbors = new List<Node>();
+
+            //  RIGHT
+            if (Row < Nodes.GetLength(0) - 1 && !Walls[1])
+            {
+                Neighbors.Add(Nodes[Row + 1, Column]);
+            }
+
+            //  LEFT
+            if (Row > 0 && !Walls[3])
+            {
+                Neighbors.Add(Nodes[Row - 1, Column]);
+            }
+
+            //  DOWN
+            if (Column < Nodes.GetLength(1) - 1 && !Walls[2])
+            {
+                Neighbors.Add(Nodes[Row, Column + 1]);
+            }
+
+            // UP
+            if (Column > 0 && !Walls[0])
+            {
+                Neighbors.Add(Nodes[Row, Column - 1]);
+            }
         }
 
     }

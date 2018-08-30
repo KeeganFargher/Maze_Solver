@@ -12,6 +12,9 @@ namespace Maze_Solver_Library
         public delegate void EventDelegate();
         public static event EventDelegate ReportProgress;
 
+        private static object synclock = new object();
+        private static Random random = new Random();
+
         public static void GenerateMaze(Node[,] Nodes)
         {
             Node current = Nodes[0, 0];
@@ -21,7 +24,8 @@ namespace Maze_Solver_Library
             while (!AreUnvisitedCells(Nodes))
             {
                 //  STEP 1 - PICK A RANDOM NEIGHBOR
-                Node next = GetRandomNeighbor(current, Nodes);
+
+                Node next = GetRandomNeighbor( current, Nodes);
                 if (next != null)
                 {
                     next.Visited = true;
@@ -64,9 +68,7 @@ namespace Maze_Solver_Library
                     current = temp;
                 }
 
-                if (ReportProgress == null) { continue; }
-                ReportProgress();
-                Thread.Sleep(1);
+                ReportProgress?.Invoke();
             }
         }
 
@@ -117,8 +119,7 @@ namespace Maze_Solver_Library
             //  Returns a random neighbour
             if (neighbors.Count > 0)
             {
-                Random random = new Random();
-                int r = (int)Math.Floor(random.Next(0, neighbors.Count) * 1.0);
+                int r = (int) Math.Floor(random.Next(0, neighbors.Count) * 1.0);
                 return neighbors[r];
             }
             return null;
