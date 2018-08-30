@@ -8,3 +8,8 @@ and solves mazes using the [A* Algorithm](https://en.wikipedia.org/wiki/A*_searc
 
 ### Maze Solver Example
 ![](https://i.imgur.com/PFmYf6s.gif)
+
+#Built Using
+* .NET Framework
+* WinForms
+* Visual Studio
