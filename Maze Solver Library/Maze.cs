@@ -14,6 +14,12 @@ namespace Maze_Solver_Library
 
         private static Random random = new Random();
 
+        /// <summary>
+        /// https://en.wikipedia.org/wiki/Maze_generation_algorithm
+        /// Recursively creates a maze using depth-first search
+        /// </summary>
+        /// <param name="Nodes">The nodes to generate a maze for</param>
+        /// <param name="visualizeMaze">Whether there should be pauses to visualize the maze</param>
         public static void GenerateMaze(Node[,] Nodes, bool visualizeMaze)
         {
             Node current = Nodes[0, 0];
@@ -29,10 +35,10 @@ namespace Maze_Solver_Library
                 {
                     next.Visited = true;
 
-                    //  STEP 2
+                    //  STEP 2 - Push the current cell to the stack
                     stack.Add(current);
 
-                    //  STEP 3
+                    //  STEP 3 - Remove the wall between the current cell and the chosen cell
                     int x = current.Row - next.Row;
                     if (x == 1)
                     {
@@ -57,7 +63,7 @@ namespace Maze_Solver_Library
                         next.Walls[0] = false;
                     }
 
-                    //  STEP 4
+                    //  STEP 4 - Make the chosen cell the current cell and mark it as visited
                     current = next;
                 }
                 else if (stack.Count > 0)

@@ -29,24 +29,24 @@ namespace Maze_Solver_Library
         private int _rows;
         private int _columns;
 
-        public void PopulateNodes(int formWidth, int formHeight, int sidebarWidth)
+        public void PopulateNodes(int formWidth, int formHeight)
         {
             OpenSet = new List<Node>();
             ClosedSet = new List<Node>();
             Paths = new List<Node>();
 
             //  Set the amount of rows and columns for the maze
-            _rows = (int) Math.Floor((formWidth  - sidebarWidth * 1.0) / MazeSize);
-            _columns = (int) Math.Floor(formHeight  / (double) MazeSize);
+            _rows    = (int) Math.Floor(formWidth  / (double) MazeSize);
+            _columns = (int) Math.Floor(formHeight / (double) MazeSize);
 
-            Nodes = new Node[_rows - 3, _columns - 3];
+            Nodes = new Node[_rows, _columns];
 
             //  Initialize the array
             for (int row = 0; row < Nodes.GetLength(0); row++)
             {
                 for (int col = 0; col < Nodes.GetLength(1); col++)
                 {
-                    Nodes[row, col] = new Node((row + 1) * MazeSize, (col + 1) * MazeSize, row, col);
+                    Nodes[row, col] = new Node(row * MazeSize, col * MazeSize, row, col);
                 }
             }
 

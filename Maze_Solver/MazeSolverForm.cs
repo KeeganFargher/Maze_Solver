@@ -17,7 +17,7 @@ namespace Maze_Solver
     {
         private AStar _aStar = new AStar();
 
-        private bool paint = false;
+        private bool paint;
             
         public MazeSolverForm()
         {
@@ -26,9 +26,15 @@ namespace Maze_Solver
 
         private void MazeSolverForm_Paint(object sender, PaintEventArgs e)
         {
+
+        }
+
+
+        private void PanelMain_Paint(object sender, PaintEventArgs e)
+        {
             if (!paint) return;
             Brush brushColor = new SolidBrush(Color.White);
-            Pen pen = new Pen(brushColor, 2);
+            Pen pen = new Pen(brushColor, 1);
 
             //  Draw maze
             DrawMaze(e, pen, 2);
@@ -90,7 +96,7 @@ namespace Maze_Solver
 
         private void ReportProgressHandler()
         {
-            Invalidate();
+            panelMain.Invalidate();
         }
 
         private void ButtonGenerator_Click(object sender, EventArgs e)
@@ -99,7 +105,7 @@ namespace Maze_Solver
             _aStar.MazeSize = Convert.ToInt32(trackBarSize.Value);
             _aStar.VisualizeMaze = checkBoxAnimate.Checked;
             _aStar.ReportProgress += ReportProgressHandler;
-            _aStar.PopulateNodes(Width, Height, panelSidebar.Width);
+            _aStar.PopulateNodes(panelMain.Width - 5, panelMain.Height - 5);
 
             Maze.ReportProgress += ReportProgressHandler;
 
@@ -111,7 +117,7 @@ namespace Maze_Solver
         {
             Task.Run(() => _aStar.SolveMaze(checkBoxSolver.Checked))
                 .ContinueWith(t => Invalidate());
-            Invalidate();
+            panelMain.Invalidate();
         }
     }
 }

@@ -30,19 +30,20 @@
         {
             this.buttonGenerate = new System.Windows.Forms.Button();
             this.panelSidebar = new System.Windows.Forms.Panel();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.checkBoxAnimate = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.buttonSolve = new System.Windows.Forms.Button();
-            this.trackBarSize = new System.Windows.Forms.TrackBar();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.checkBoxSolver = new System.Windows.Forms.CheckBox();
+            this.buttonSolve = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.trackBarSize = new System.Windows.Forms.TrackBar();
+            this.checkBoxAnimate = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panelMain = new Maze_Solver.DoubleBufferedPanel();
             this.panelSidebar.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSize)).BeginInit();
-            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonGenerate
@@ -72,89 +73,6 @@
             this.panelSidebar.Size = new System.Drawing.Size(247, 618);
             this.panelSidebar.TabIndex = 1;
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.trackBarSize);
-            this.groupBox1.Controls.Add(this.checkBoxAnimate);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.buttonGenerate);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.ForeColor = System.Drawing.Color.White;
-            this.groupBox1.Location = new System.Drawing.Point(8, 8);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(231, 188);
-            this.groupBox1.TabIndex = 2;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Maze Generator";
-            // 
-            // checkBoxAnimate
-            // 
-            this.checkBoxAnimate.AutoSize = true;
-            this.checkBoxAnimate.Checked = true;
-            this.checkBoxAnimate.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAnimate.Location = new System.Drawing.Point(10, 110);
-            this.checkBoxAnimate.Name = "checkBoxAnimate";
-            this.checkBoxAnimate.Size = new System.Drawing.Size(131, 25);
-            this.checkBoxAnimate.TabIndex = 5;
-            this.checkBoxAnimate.Text = "Visualize Maze";
-            this.checkBoxAnimate.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 35);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(120, 21);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Maze Block Size";
-            // 
-            // buttonSolve
-            // 
-            this.buttonSolve.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(39)))), ((int)(((byte)(205)))));
-            this.buttonSolve.FlatAppearance.BorderSize = 0;
-            this.buttonSolve.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSolve.Location = new System.Drawing.Point(8, 68);
-            this.buttonSolve.Name = "buttonSolve";
-            this.buttonSolve.Size = new System.Drawing.Size(215, 31);
-            this.buttonSolve.TabIndex = 1;
-            this.buttonSolve.Text = "Solve Maze";
-            this.buttonSolve.UseVisualStyleBackColor = false;
-            this.buttonSolve.Click += new System.EventHandler(this.ButtonSolve_Click);
-            // 
-            // trackBarSize
-            // 
-            this.trackBarSize.Location = new System.Drawing.Point(10, 59);
-            this.trackBarSize.Maximum = 50;
-            this.trackBarSize.Minimum = 2;
-            this.trackBarSize.Name = "trackBarSize";
-            this.trackBarSize.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.trackBarSize.Size = new System.Drawing.Size(211, 45);
-            this.trackBarSize.TabIndex = 3;
-            this.trackBarSize.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.trackBarSize.Value = 25;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(197, 83);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(24, 15);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Big";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(17, 83);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(36, 15);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Small";
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.checkBoxSolver);
@@ -180,12 +98,105 @@
             this.checkBoxSolver.Text = "Visualize Maze Solver";
             this.checkBoxSolver.UseVisualStyleBackColor = true;
             // 
+            // buttonSolve
+            // 
+            this.buttonSolve.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(39)))), ((int)(((byte)(205)))));
+            this.buttonSolve.FlatAppearance.BorderSize = 0;
+            this.buttonSolve.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSolve.Location = new System.Drawing.Point(8, 68);
+            this.buttonSolve.Name = "buttonSolve";
+            this.buttonSolve.Size = new System.Drawing.Size(215, 31);
+            this.buttonSolve.TabIndex = 1;
+            this.buttonSolve.Text = "Solve Maze";
+            this.buttonSolve.UseVisualStyleBackColor = false;
+            this.buttonSolve.Click += new System.EventHandler(this.ButtonSolve_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.trackBarSize);
+            this.groupBox1.Controls.Add(this.checkBoxAnimate);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.buttonGenerate);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox1.ForeColor = System.Drawing.Color.White;
+            this.groupBox1.Location = new System.Drawing.Point(8, 8);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(231, 188);
+            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Maze Generator";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(17, 83);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(36, 15);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Small";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(197, 83);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(24, 15);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Big";
+            // 
+            // trackBarSize
+            // 
+            this.trackBarSize.Location = new System.Drawing.Point(10, 59);
+            this.trackBarSize.Maximum = 50;
+            this.trackBarSize.Minimum = 2;
+            this.trackBarSize.Name = "trackBarSize";
+            this.trackBarSize.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.trackBarSize.Size = new System.Drawing.Size(211, 45);
+            this.trackBarSize.TabIndex = 3;
+            this.trackBarSize.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trackBarSize.Value = 25;
+            // 
+            // checkBoxAnimate
+            // 
+            this.checkBoxAnimate.AutoSize = true;
+            this.checkBoxAnimate.Checked = true;
+            this.checkBoxAnimate.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxAnimate.Location = new System.Drawing.Point(10, 110);
+            this.checkBoxAnimate.Name = "checkBoxAnimate";
+            this.checkBoxAnimate.Size = new System.Drawing.Size(131, 25);
+            this.checkBoxAnimate.TabIndex = 5;
+            this.checkBoxAnimate.Text = "Visualize Maze";
+            this.checkBoxAnimate.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 35);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(120, 21);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Maze Block Size";
+            // 
+            // panelMain
+            // 
+            this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelMain.Location = new System.Drawing.Point(0, 0);
+            this.panelMain.Name = "panelMain";
+            this.panelMain.Size = new System.Drawing.Size(841, 618);
+            this.panelMain.TabIndex = 2;
+            this.panelMain.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelMain_Paint);
+            // 
             // MazeSolverForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.ClientSize = new System.Drawing.Size(1088, 618);
+            this.Controls.Add(this.panelMain);
             this.Controls.Add(this.panelSidebar);
             this.DoubleBuffered = true;
             this.Name = "MazeSolverForm";
@@ -193,11 +204,11 @@
             this.Text = "Maze Solver";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.MazeSolverForm_Paint);
             this.panelSidebar.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSize)).EndInit();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -215,6 +226,7 @@
         private System.Windows.Forms.TrackBar trackBarSize;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.CheckBox checkBoxSolver;
+        private DoubleBufferedPanel panelMain;
     }
 }
 

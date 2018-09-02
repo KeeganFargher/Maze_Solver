@@ -76,8 +76,8 @@ namespace Maze_Solver_Library
 
         public Node(int x, int y, int row, int column)
         {
-            X = x;
-            Y = y;
+            X = x + 3;
+            Y = y + 3;
             Row = row;
             Column = column;
         }
