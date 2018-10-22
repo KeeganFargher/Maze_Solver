@@ -49,6 +49,7 @@
     <Compile Include="Maze.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="NodeState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

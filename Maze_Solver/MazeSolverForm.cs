@@ -15,9 +15,9 @@ namespace Maze_Solver
 {
     public partial class MazeSolverForm : Form
     {
-        private AStar _aStar = new AStar();
+        private readonly AStar _aStar = new AStar();
 
-        private bool paint;
+        private bool _paint;
             
         public MazeSolverForm()
         {
@@ -32,17 +32,19 @@ namespace Maze_Solver
 
         private void PanelMain_Paint(object sender, PaintEventArgs e)
         {
-            if (!paint) return;
+            if (!_paint) return;
             Brush brushColor = new SolidBrush(Color.White);
             Pen pen = new Pen(brushColor, 1);
 
             //  Draw maze
-            DrawMaze(e, pen, 2);
+            DrawMaze(e, pen, 1);
 
-            brushColor = new SolidBrush(Color.FromArgb(95, 39, 205));
-            pen = new Pen(brushColor, 3);
-
-            DrawPath(e, pen);
+            if (_aStar.MazeSolved)
+            {
+                brushColor = new SolidBrush(Color.FromArgb(95, 39, 205));
+                pen = new Pen(brushColor, 3);
+                DrawPath(e, pen);
+            }
         }
 
         private void DrawMaze(PaintEventArgs e, Pen pen, int penSize)
@@ -51,23 +53,46 @@ namespace Maze_Solver
             {
                 for (int col = 0; col < _aStar.Nodes.GetLength(1); col++)
                 {
+                    //  Drawing walls
                     List<Point> points = _aStar.Nodes[row, col].Draw(_aStar.MazeSize);
                     for (int i = 0; i < points.Count - 1; i += 2)
                     {
                         e.Graphics.DrawLine(pen, points[i], points[i + 1]);
                     }
 
-                    //  Fill color to see that this is the starting node
-                    if (_aStar.Nodes[row, col].IsStartNode)
+                    switch (_aStar.Nodes[row, col].State)
                     {
-                        Brush startBrush = new SolidBrush(Color.Green);
-                        e.Graphics.FillRectangle(startBrush, GetRectangleF(row, col, penSize));
-                    }
-
-                    if (_aStar.Nodes[row, col].IsFinishNode)
-                    {
-                        Brush startBrush = new SolidBrush(Color.Red);
-                        e.Graphics.FillRectangle(startBrush, GetRectangleF(row, col, penSize));
+                        //  Fill color to see that this is the starting node
+                        case NodeState.Start:
+                        {
+                            Brush startBrush = new SolidBrush(Color.Green);
+                            e.Graphics.FillRectangle(startBrush, GetRectangleF(row, col, penSize));
+                            break;
+                        }
+                        case NodeState.End:
+                        {
+                            Brush startBrush = new SolidBrush(Color.Red);
+                            e.Graphics.FillRectangle(startBrush, GetRectangleF(row, col, penSize));
+                            break;
+                        }
+                        case NodeState.Open:
+                        {
+                            if (_aStar.MazeSolved) break;
+                            Brush startBrush = new SolidBrush(Color.FromArgb(39, 174, 96));
+                            e.Graphics.FillRectangle(startBrush, GetRectangleF(row, col, penSize));
+                            break;
+                        }
+                        case NodeState.Closed:
+                        {
+                            if (_aStar.MazeSolved) break;
+                            Brush startBrush = new SolidBrush(Color.FromArgb(192, 57, 43));
+                            e.Graphics.FillRectangle(startBrush, GetRectangleF(row, col, penSize));
+                            break;
+                        }
+                        case NodeState.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                 }
             }
@@ -91,6 +116,8 @@ namespace Maze_Solver
                 Point point1 = new Point(paths[i].X + size / 2, paths[i].Y + size / 2);
                 Point point2 = new Point(paths[i + 1].X + size / 2, paths[i + 1].Y + size / 2);
                 e.Graphics.DrawLine(pen, point1, point2);
+
+                Invalidate();
             }
         }
 
@@ -101,7 +128,7 @@ namespace Maze_Solver
 
         private void ButtonGenerator_Click(object sender, EventArgs e)
         {
-            paint = true;
+            _paint = true;
             _aStar.MazeSize = Convert.ToInt32(trackBarSize.Value);
             _aStar.VisualizeMaze = checkBoxAnimate.Checked;
             _aStar.ReportProgress += ReportProgressHandler;

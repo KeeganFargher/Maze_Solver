@@ -14,19 +14,26 @@ namespace Maze_Solver_Library
 
         public event EventDelegate ReportProgress;
 
+        public bool MazeSolved { get; set; } = false;
+
         public int MazeSize { get; set; } = 10;
+
         public bool VisualizeMaze { get; set; } = true;
 
         public Node[,] Nodes { get; private set; }
 
         private List<Node> OpenSet { get; set; } = new List<Node>();
+
         private List<Node> ClosedSet { get; set; } = new List<Node>();
+
         public List<Node> Paths { get; private set; } = new List<Node>();
 
         private Node _startNode = new Node();
+
         private Node _finishNode = new Node();
 
         private int _rows;
+
         private int _columns;
 
         public void PopulateNodes(int formWidth, int formHeight)
@@ -34,6 +41,7 @@ namespace Maze_Solver_Library
             OpenSet = new List<Node>();
             ClosedSet = new List<Node>();
             Paths = new List<Node>();
+            MazeSolved = false;
 
             //  Set the amount of rows and columns for the maze
             _rows    = (int) Math.Floor(formWidth  / (double) MazeSize);
@@ -52,10 +60,10 @@ namespace Maze_Solver_Library
 
             //  Create a start and end point for the maze
             _startNode = Nodes[0, 0];
-            _startNode.IsStartNode = true;
+            _startNode.State = NodeState.Start;
 
             _finishNode = Nodes[Nodes.GetLength(0) - 1, Nodes.GetLength(1) - 1];
-            _finishNode.IsFinishNode = true;
+            _finishNode.State = NodeState.End;
 
             OpenSet.Add(_startNode);
         }
@@ -81,6 +89,7 @@ namespace Maze_Solver_Library
 
                 OpenSet.Remove(current);
                 ClosedSet.Add(current);
+                current.State = NodeState.Closed;
 
                 var neighbors = current.Neighbors;
                 CalculateNeighbors(current, neighbors);
@@ -91,6 +100,8 @@ namespace Maze_Solver_Library
                 //  We reached the end if this evaluates to true
                 if (current == _finishNode)
                 {
+                    MazeSolved = true;
+                    ReportProgress();
                     return;
                 }
 
@@ -104,10 +115,8 @@ namespace Maze_Solver_Library
 
         private void CalculateNeighbors(Node current, IReadOnlyList<Node> neighbors)
         {
-            for (int i = 0; i < neighbors.Count; i++)
+            foreach (Node neighbor in neighbors)
             {
-                Node neighbor = neighbors[i];
-
                 if (ClosedSet.Contains(neighbor) || neighbor.IsWall) continue;
 
                 int tempGScore = current.GScore + 1;
@@ -125,6 +134,7 @@ namespace Maze_Solver_Library
                 {
                     neighbor.GScore = tempGScore;
                     OpenSet.Add(neighbor);
+                    neighbor.State = NodeState.Open;
                     newPath = true;
                 }
 
